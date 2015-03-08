@@ -10,13 +10,17 @@ class AveragedSamples
 {
     /** @var array */
     private $samples;
+    /** @var int */
+    private $timestamp;
 
     /**
+     * @param int   $timestamp
      * @param array $samples
      */
-    function __construct( array $samples )
+    function __construct( $timestamp, array $samples )
     {
         $this->samples = $samples;
+        $this->timestamp = $timestamp;
     }
 
     /**
@@ -28,6 +32,14 @@ class AveragedSamples
             return null;
         }
         return \array_sum( $this->samples ) / \count( $this->samples );
+    }
+
+    /**
+     * @return int
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
     }
 }
 //EOF AveragedSamples.php

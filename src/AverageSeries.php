@@ -36,9 +36,9 @@ class AverageSeries
             $timestamp = $timestampedValue->getTimestamp();
             $timeBuckets[intval( ( $timestamp - $from ) / $interval )][] = $timestampedValue->getSample();
         }
-        return array_values( \array_map( function ( $timeBucket ) {
-            return new AveragedSamples( $timeBucket );
-        }, $timeBuckets ) );
+        return array_values( \array_map( function ( $timestampKey, $timeBucket ) use ( $interval, $from ) {
+            return new AveragedSamples( $timestampKey * $interval + $from, $timeBucket );
+        }, array_keys( $timeBuckets ), $timeBuckets ) );
     }
 
 }

@@ -28,7 +28,7 @@ class AverageSeriesTest extends \PHPUnit_Framework_TestCase
     {
         $averageSeries = $this->createAverageSeriesFromSeries( [ $this->generateSample() ] );
         $averaged = $averageSeries->getAverageSeries( self::SERIES_NAME, self::FROM_TIME, self::TO_TIME, self::ONE_SECOND );
-        $this->assertEquals( [ new AveragedSamples( [ self::SAMPLE ] ) ], $averaged );
+        $this->assertEquals( [ new AveragedSamples( self::SAMPLE_TIMESTAMP, [ self::SAMPLE ] ) ], $averaged );
     }
 
     public function testAverageSameDataPoint()
@@ -36,33 +36,36 @@ class AverageSeriesTest extends \PHPUnit_Framework_TestCase
         $singleDataPoint = $this->generateSample();
         $averageSeries = $this->createAverageSeriesFromSeries( [ $singleDataPoint, $singleDataPoint ] );
         $averaged = $averageSeries->getAverageSeries( self::SERIES_NAME, self::FROM_TIME, self::TO_TIME, self::ONE_SECOND );
-        $this->assertEquals( [ new AveragedSamples( [ self::SAMPLE, self::SAMPLE ] ) ], $averaged );
+        $this->assertEquals( [ new AveragedSamples( self::SAMPLE_TIMESTAMP, [ self::SAMPLE, self::SAMPLE ] ) ], $averaged );
     }
 
     public function testAverageWithTwoIntervals()
     {
         $averageSeries = $this->createAverageSeriesFromSeries( $this->generateConsecutiveSamplesSeries() );
         $averaged = $averageSeries->getAverageSeries( self::SERIES_NAME, self::FROM_TIME, self::TO_TIME, self::ONE_SECOND );
-        $this->assertEquals( [ new AveragedSamples( [ self::SAMPLE ] ), new AveragedSamples( [ self::SAMPLE ] ) ], $averaged );
+        $this->assertEquals( [ new AveragedSamples( self::SAMPLE_TIMESTAMP,     [ self::SAMPLE ] ),
+                               new AveragedSamples( self::SAMPLE_TIMESTAMP + 1, [ self::SAMPLE ] ) ], $averaged );
     }
 
     public function testAverageWithMinuteInterval()
     {
         $averageSeries = $this->createAverageSeriesFromSeries( $this->generateConsecutiveSamplesSeries() );
         $averaged = $averageSeries->getAverageSeries( self::SERIES_NAME, self::FROM_TIME, self::TO_TIME, self::ONE_MINUTE );
-        $this->assertEquals( [ new AveragedSamples( [ self::SAMPLE, self::SAMPLE ] ) ], $averaged );
+        $this->assertEquals( [ new AveragedSamples( self::ONE_MINUTE, [ self::SAMPLE, self::SAMPLE ] ) ], $averaged );
     }
 
     public function testAverageFromTooHigh()
     {
         $averageSeries = $this->createAverageSeriesFromSeries( $this->generateConsecutiveSamplesSeries() );
-        $this->assertEquals( [], $averageSeries->getAverageSeries( self::SERIES_NAME, self::SAMPLE_TIMESTAMP + 10, self::TO_TIME, self::ONE_MINUTE ) );
+        $averagedSamples = $averageSeries->getAverageSeries( self::SERIES_NAME, self::SAMPLE_TIMESTAMP + 10, self::TO_TIME, self::ONE_MINUTE );
+        $this->assertEquals( [], $averagedSamples );
     }
 
     public function testAverageToTooSmall()
     {
         $averageSeries = $this->createAverageSeriesFromSeries( $this->generateConsecutiveSamplesSeries() );
-        $this->assertEquals( [], $averageSeries->getAverageSeries( self::SERIES_NAME, self::FROM_TIME, self::SAMPLE_TIMESTAMP - 10, self::ONE_MINUTE ) );
+        $averagedSamples = $averageSeries->getAverageSeries( self::SERIES_NAME, self::FROM_TIME, self::SAMPLE_TIMESTAMP - 10, self::ONE_MINUTE );
+        $this->assertEquals( [], $averagedSamples );
     }
 
     public function testAverageInvalidName()
@@ -77,8 +80,9 @@ class AverageSeriesTest extends \PHPUnit_Framework_TestCase
     {
         $averageSeries = $this->createAverageSeriesFromSeries( [ $this->generateSampleAt( 50 ),
                                                                  $this->generateSampleAt( 69 ) ] );
-        $averaged = $averageSeries->getAverageSeries( self::SERIES_NAME, 40, 100, 30 );
-        $this->assertEquals( [ new AveragedSamples( [ self::SAMPLE, self::SAMPLE ] ) ], $averaged );
+        $from = 40;
+        $averaged = $averageSeries->getAverageSeries( self::SERIES_NAME, $from, 100, 30 );
+        $this->assertEquals( [ new AveragedSamples( $from, [ self::SAMPLE, self::SAMPLE ] ) ], $averaged );
     }
 
     /**
