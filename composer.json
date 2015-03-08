@@ -1,0 +1,21 @@
+{
+    "name": "adrianclay/metric-query-enging",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Adrian Clay",
+            "email": "adieclay@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "adrianclay\\Stats\\Aggregation\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "adrianclay\\Stats\\Aggregation\\": "tests/"
+        }
+    }
+}
