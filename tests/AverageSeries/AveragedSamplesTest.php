@@ -13,19 +13,19 @@ class AveragedSamplesTest extends \PHPUnit_Framework_TestCase
     public function testEmptyAverage()
     {
         $averagedSamples = new AveragedSamples( 0, [ ] );
-        $this->assertSame( 0, $averagedSamples->getAggregatedValue() );
+        $this->assertSame( 0, $averagedSamples->getSample() );
     }
 
     public function testSingleSample()
     {
         $averagedSamples = new AveragedSamples( 0, [ 1 ] );
-        $this->assertSame( 1, $averagedSamples->getAggregatedValue() );
+        $this->assertSame( 1, $averagedSamples->getSample() );
     }
 
     public function testAverageTwoSamples()
     {
         $averagedSamples = new AveragedSamples( 0, [ 1, 2 ] );
-        $this->assertSame( ( 1 + 2 ) / 2, $averagedSamples->getAggregatedValue() );
+        $this->assertSame( ( 1 + 2 ) / 2, $averagedSamples->getSample() );
     }
 
     public function testTimestamp()

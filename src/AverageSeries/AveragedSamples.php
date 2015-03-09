@@ -1,12 +1,13 @@
 <?php
 
 namespace adrianclay\Stats\Aggregation\AverageSeries;
+use adrianclay\Stats\Aggregation\TimestampedSample;
 
 /**
  * @author Adrian Clay <adieclay@gmail.com>
  * @since  07/03/2015
  */
-class AveragedSamples
+class AveragedSamples implements TimestampedSample
 {
     /** @var array */
     private $samples;
@@ -24,9 +25,9 @@ class AveragedSamples
     }
 
     /**
-     * @return float|null
+     * @return float
      */
-    public function getAggregatedValue()
+    public function getSample()
     {
         if ( empty( $this->samples ) ) {
             return 0;
