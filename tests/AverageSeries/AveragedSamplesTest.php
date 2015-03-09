@@ -13,7 +13,7 @@ class AveragedSamplesTest extends \PHPUnit_Framework_TestCase
     public function testEmptyAverage()
     {
         $averagedSamples = new AveragedSamples( 0, [ ] );
-        $this->assertNull( $averagedSamples->getAggregatedValue() );
+        $this->assertSame( 0, $averagedSamples->getAggregatedValue() );
     }
 
     public function testSingleSample()

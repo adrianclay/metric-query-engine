@@ -29,7 +29,7 @@ class AveragedSamples
     public function getAggregatedValue()
     {
         if ( empty( $this->samples ) ) {
-            return null;
+            return 0;
         }
         return \array_sum( $this->samples ) / \count( $this->samples );
     }
